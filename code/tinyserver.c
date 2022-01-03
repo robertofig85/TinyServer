@@ -199,12 +199,12 @@ ProcessRequest(socket_io* Client)
                 TsHttp._TSGetFormFieldByIdx = &ExternalGetFormFieldByIdx;
                 
                 TsHttp._TSAllocContentBuffer = &ExternalAllocContentBuffer;
-                TsHttp._TSAllocCookieBuffer = &ExternalAllocCookiesBuffer;
+                TsHttp._TSAllocCookiesBuffer = &ExternalAllocCookiesBuffer;
                 TsHttp._TSRecordCookie = &ExternalRecordCookie;
                 TsHttp._TSSetReturnCode = &ExternalSetReturnCode;
                 TsHttp._TSSetContentType = &ExternalSetContentType;
                 TsHttp._TSSetContentSize = &ExternalSetContentSize;
-                TsHttp._TSSetCookieSize = &ExternalSetCookieSize;
+                TsHttp._TSSetCookiesSize = &ExternalSetCookiesSize;
                 
                 App->Module(&TsHttp);
             }

@@ -68,7 +68,7 @@ ExternalAllocContentBuffer(ts_http* Http, size_t MemSize)
     {
         usz SizeToAlloc = Round(MemSize, GlobalServerInfo->OutBodyMaxSize);
         Result.Ptr = HttpInfo->Response.Content = GetMemoryFromSystem(SizeToAlloc);
-        Result.Size = SizeToAlloc;
+        Result.MaxSize = SizeToAlloc;
     }
     return Result;
 }
@@ -177,30 +177,58 @@ ExternalSetReturnCode(ts_http* Http, size_t Code)
     bool Result = false;
     switch ((status_code)Code)
     {
-        case StatusCode_OK:
-        case StatusCode_Created:
-        case StatusCode_Accepted:
-        case StatusCode_NonAuthInfo:
-        case StatusCode_NoContent:
-        case StatusCode_ResetContent:
-        case StatusCode_MultipleChoices:
-        case StatusCode_MovedPermanently:
-        case StatusCode_Found:
-        case StatusCode_SeeOther:
-        case StatusCode_NoModified:
-        case StatusCode_UseProxy:
-        case StatusCode_TempRedirect:
-        case StatusCode_PermRedirect:
-        case StatusCode_BadRequest:
-        case StatusCode_Unauthorized:
-        case StatusCode_PaymentRequired:
-        case StatusCode_Forbidden:
-        case StatusCode_NotFound:
-        case StatusCode_NotAcceptable:
-        case StatusCode_Conflict:
-        case StatusCode_Gone:
-        case StatusCode_ImATeapot:
-        case StatusCode_UnavailableForLegalReasons:
+        case StatusCode_Continue:
+		case StatusCode_SwitchingProtocol:    
+		case StatusCode_OK:
+		case StatusCode_Created:
+		case StatusCode_Accepted:
+		case StatusCode_NonAuthInfo:
+		case StatusCode_NoContent:
+		case StatusCode_ResetContent:    
+		case StatusCode_MultipleChoices:
+		case StatusCode_MovedPermanently:
+		case StatusCode_Found:
+		case StatusCode_SeeOther:
+		case StatusCode_NoModified:
+		case StatusCode_UseProxy:
+		case StatusCode_TempRedirect:
+		case StatusCode_PermRedirect:    
+		case StatusCode_BadRequest:
+		case StatusCode_Unauthorized:
+		case StatusCode_PaymentRequired:
+		case StatusCode_Forbidden:
+		case StatusCode_NotFound:
+		case StatusCode_MethodNotAllowed:
+		case StatusCode_NotAcceptable:
+		case StatusCode_ProxyAuthRequired:
+		case StatusCode_RequestTimeout:
+		case StatusCode_Conflict:
+		case StatusCode_Gone:
+		case StatusCode_LengthRequired:
+		case StatusCode_PreconditionFailed:
+		case StatusCode_PayloadTooLarge:
+		case StatusCode_URITooLong:
+		case StatusCode_UnsupportedMediaType:
+		case StatusCode_RangeNotSatisfiable:
+		case StatusCode_ExpectationFailed:
+		case StatusCode_ImATeapot:
+		case StatusCode_MisdirectedRequest:
+		case StatusCode_TooEarly:
+		case StatusCode_UpgradeRequired:
+		case StatusCode_PreconditionRequired:
+		case StatusCode_TooManyRequests:
+		case StatusCode_ReqHeaderTooLarge:
+		case StatusCode_LoginTimeout:
+		case StatusCode_UnavailableForLegalReasons:    
+		case StatusCode_InternalServerError:
+		case StatusCode_NotImplemented:
+		case StatusCode_BadGateway:
+		case StatusCode_ServiceUnavailable:
+		case StatusCode_GatewayTimeout:
+		case StatusCode_HttpVersionNotSupported:
+		case StatusCode_InsufficientStorage:
+		case StatusCode_NotExtended:
+		case StatusCode_NetworkAuthRequired:
         {
             HttpInfo->Response.StatusCode = (status_code)Code;
             Result = true;
@@ -215,11 +243,21 @@ ExternalSetReturnCode(ts_http* Http, size_t Code)
     return Result;
 }
 
-extern void
+extern bool
 ExternalSetContentType(ts_http* Http, char* ContentType)
 {
-    http_info* HttpInfo = (http_info*)Http->Object;
-    HttpInfo->Response.ContentType = String(ContentType, StrLen(ContentType));
+	http_info* HttpInfo = (http_info*)Http->Object;
+	string Dst = StringBuffer(HttpInfo->Response.ContentTypeBuffer, 0,
+	sizeof(HttpInfo->Response.ContentTypeBuffer));
+	string Src = String(ContentType, StrLen(ContentType));
+	
+	bool Result = false;
+    if (CopyString(&Dst, Src))
+	{
+		HttpInfo->Response.ContentTypeSize = Dst.Size;
+		Result = true;
+	}
+	return Result;
 }
 
 extern void
@@ -230,7 +268,7 @@ ExternalSetContentSize(ts_http* Http, size_t Size)
 }
 
 extern void
-ExternalSetCookieSize(ts_http* Http, size_t Size)
+ExternalSetCookiesSize(ts_http* Http, size_t Size)
 {
     http_info* HttpInfo = (http_info*)Http->Object;
     HttpInfo->Response.CookiesSize = Size;

@@ -16,6 +16,7 @@
 #define EvalStr(Str) if (Str.Size == 0) goto evalstr_fail;
 #define Eval(Expression) if (!(Expression)) goto eval_fail;
 
+#define MIME_MAX_SIZE 85
 #define IMF_DATE_LENGTH 30
 #define ERROR_500_MESSAGE \
 "HTTP/1.1 500 Internal Server Error\r\n"\
@@ -249,9 +250,12 @@ typedef struct
     usz FileHandle;
     char* Content;
     usz ContentSize;
-    string ContentType;
+	
+	string ContentType;
+    char ContentTypeBuffer[MIME_MAX_SIZE];   // OBS(roberto): Usado somente pela aplicacao.
+    usz ContentTypeSize;   // OBS(roberto): Usado somente pela aplicacao.
     
-    char* Cookies;
+	char* Cookies;
     usz CookiesSize;
 } response;
 

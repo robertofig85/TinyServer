@@ -115,29 +115,29 @@ typedef struct
     void* Object;
     
     // Request header.
-    ts_http_verb Verb;
-    ts_string Path;
-    ts_string Query;
-    size_t HeaderCount;
+    const ts_http_verb Verb;
+    const ts_string Path;
+    const ts_string Query;
+    const size_t HeaderCount;
     ts_string (*_TSGetHeaderByKey)(ts_http*, char*);
     ts_string (*_TSGetHeaderByIdx)(ts_http*, size_t);
     
     // Request body.
-    void* Entity;
-    size_t EntitySize;
-    ts_mime_type EntityType;
+    void* const Entity;
+    const size_t EntitySize;
+    const ts_mime_type EntityType;
     ts_form (*_TSParseFormData)(ts_http*);
     ts_form_field (*_TSGetFormFieldByName)(ts_form*, char*);
     ts_form_field (*_TSGetFormFieldByIdx)(ts_form*, size_t);
     
     // Response.
     ts_string (*_TSAllocContentBuffer)(ts_http*, size_t);
-    ts_string (*_TSAllocCookieBuffer)(ts_http*, size_t);
+    ts_string (*_TSAllocCookiesBuffer)(ts_http*, size_t);
     bool (*_TSRecordCookie)(ts_http*, ts_cookie*);
     bool (*_TSSetReturnCode)(ts_http*, size_t);
     void (*_TSSetContentType)(ts_http*, char*);
     void (*_TSSetContentSize)(ts_http*, size_t);
-    void (*_TSSetCookieSize)(ts_http*, size_t);
+    void (*_TSSetCookiesSize)(ts_http*, size_t);
 } ts_http;
 
 // C methods.
@@ -146,13 +146,13 @@ ts_string (*TSGetHeaderByIdx)(ts_http*, size_t);
 ts_form (*TSParseFormData)(ts_http*);
 ts_form_field (*TSGetFormFieldByName)(ts_form*, char*);
 ts_form_field (*TSGetFormFieldByIdx)(ts_form*, size_t);
-char* (*TSAllocContentBuffer)(ts_http*, size_t);
-char* (*TSAllocCookieBuffer)(ts_http*, size_t);
+ts_string (*TSAllocContentBuffer)(ts_http*, size_t);
+ts_string (*TSAllocCookiesBuffer)(ts_http*, size_t);
 bool (*TSRecordCookie)(ts_http*, ts_cookie*);
 bool (*TSSetReturnCode)(ts_http*, size_t);
-ts_string (*TSSetContentType)(ts_http*, char*);
-ts_string (*TSSetContentSize)(ts_http*, size_t);
-void (*TSSetCookieSize)(ts_http*, size_t);
+void (*TSSetContentType)(ts_http*, char*);
+void (*TSSetContentSize)(ts_http*, size_t);
+void (*TSSetCookiesSize)(ts_http*, size_t);
 
 void TSInit(ts_http* Http)
 {
@@ -162,12 +162,12 @@ void TSInit(ts_http* Http)
     TSGetFormFieldByName = Http->_TSGetFormFieldByName;
     TSGetFormFieldByIdx = Http->_TSGetFormFieldByIdx;
     TSAllocContentBuffer = Http->_TSAllocContentBuffer;
-    TSAllocCookieBuffer = Http->_TSAllocCookieBuffer;
+    TSAllocCookiesBuffer = Http->_TSAllocCookiesBuffer;
     TSRecordCookie = Http->_TSRecordCookie;
     TSSetReturnCode = Http->_TSSetReturnCode;
     TSSetContentType = Http->_TSSetContentType;
     TSSetContentSize = Http->_TSSetContentSize;
-    TSSetCookieSize = Http->_TSSetCookieSize;
+    TSSetCookiesSize = Http->_TSSetCookiesSize;
 }
 
 

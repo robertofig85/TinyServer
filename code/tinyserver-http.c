@@ -783,7 +783,14 @@ CreateHttpResponseHeader(request* Request, response* Response)
     if (Response->ContentSize)
     {
         Eval(AppendString(&Header, StrLit("Content-Type: ")));
-        Eval(AppendString(&Header, Response->ContentType));
+		if (Response->ContentType.Ptr)
+		{
+			Eval(AppendString(&Header, Response->ContentType));
+		}
+		else
+		{
+			Eval(AppendString(&Header, String(Response->ContentTypeBuffer, Response->ContentTypeSize)));
+		}
         Eval(AppendString(&Header, LineBreak));
     }
     

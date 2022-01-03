@@ -115,29 +115,29 @@ struct ts_http
     void* Object;
     
     // Request header.
-    ts_http_verb Verb;
-    ts_string Path;
-    ts_string Query;
-    size_t HeaderCount;
+    const ts_http_verb Verb;
+    const ts_string Path;
+    const ts_string Query;
+    const size_t HeaderCount;
     ts_string (*_TSGetHeaderByKey)(ts_http*, char*);
     ts_string (*_TSGetHeaderByIdx)(ts_http*, size_t);
     
     // Request body.
-    void* Entity;
-    size_t EntitySize;
-    ts_mime_type EntityType;
+    void* const Entity;
+    const size_t EntitySize;
+    const ts_mime_type EntityType;
     ts_form (*_TSParseFormData)(ts_http*);
     ts_form_field (*_TSGetFormFieldByName)(ts_form*, char*);
     ts_form_field (*_TSGetFormFieldByIdx)(ts_form*, size_t);
     
     // Response.
     ts_string (*_TSAllocContentBuffer)(ts_http*, size_t);
-    ts_string (*_TSAllocCookieBuffer)(ts_http*, size_t);
+    ts_string (*_TSAllocCookiesBuffer)(ts_http*, size_t);
     bool (*_TSRecordCookie)(ts_http*, ts_cookie*);
     bool (*_TSSetReturnCode)(ts_http*, size_t);
     void (*_TSSetContentType)(ts_http*, char*);
     void (*_TSSetContentSize)(ts_http*, size_t);
-    void (*_TSSetCookieSize)(ts_http*, size_t);
+    void (*_TSSetCookiesSize)(ts_http*, size_t);
     
     // C++ methods.
     ts_string GetHeaderByKey(char* A) { return _TSGetHeaderByKey(this, A); }
@@ -146,12 +146,12 @@ struct ts_http
     ts_form_field GetFormFieldByName(ts_form* A, char* B) { return _TSGetFormFieldByName(A, B); }
     ts_form_field GetFormFieldByIdx(ts_form* A, size_t B) { return _TSGetFormFieldByIdx(A, B); }
     ts_string AllocContentBuffer(size_t A) { return _TSAllocContentBuffer(this, A); }
-    ts_string AllocCookieBuffer(size_t A) { return _TSAllocCookieBuffer(this, A); }
+    ts_string AllocCookiesBuffer(size_t A) { return _TSAllocCookiesBuffer(this, A); }
     bool RecordCookie(ts_cookie* A) { return _TSRecordCookie(this, A); }
     bool SetReturnCode(size_t A) { return _TSSetReturnCode(this, A); }
     void SetContentType(char* A) { return _TSSetContentType(this, A); }
     void SetContentSize(size_t A) { return _TSSetContentSize(this, A); }
-    void SetCookieSize(size_t A) { return _TSSetCookieSize(this, A); }
+    void SetCookiesSize(size_t A) { return _TSSetCookiesSize(this, A); }
 };
 
 #endif

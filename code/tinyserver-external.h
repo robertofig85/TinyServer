@@ -42,12 +42,12 @@ struct _ts_http
     
     // Response.
     ts_string (*_TSAllocContentBuffer)(ts_http*, size_t);
-    ts_string (*_TSAllocCookieBuffer)(ts_http*, size_t);
+    ts_string (*_TSAllocCookiesBuffer)(ts_http*, size_t);
     bool (*_TSRecordCookie)(ts_http*, ts_cookie*);
     bool (*_TSSetReturnCode)(ts_http*, size_t);
-    void (*_TSSetContentType)(ts_http*, char*);
+    bool (*_TSSetContentType)(ts_http*, char*);
     void (*_TSSetContentSize)(ts_http*, size_t);
-    void (*_TSSetCookieSize)(ts_http*, size_t);
+    void (*_TSSetCookiesSize)(ts_http*, size_t);
 };
 
 #endif
